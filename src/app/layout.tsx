@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, Inter_Tight, JetBrains_Mono } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
 import { Analytics } from "@vercel/analytics/react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -55,15 +57,49 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body
-        className={`${spaceGrotesk.variable} ${interTight.variable} ${jetbrainsMono.variable} antialiased`}
-      >
-        <Navbar />
-        <main className="min-h-screen">{children}</main>
-        <Footer />
-        <Analytics />
-      </body>
-    </html>
+    <ClerkProvider
+      appearance={{
+        baseTheme: dark,
+        variables: {
+          colorPrimary: "#00D4FF",
+          colorBackground: "#0D1425",
+          colorInputBackground: "#131B33",
+          colorInputText: "#E2E8F0",
+          colorText: "#E2E8F0",
+          colorTextSecondary: "#94A3B8",
+          borderRadius: "0.5rem",
+        },
+        elements: {
+          card: "bg-navy-900 border border-white/10 shadow-2xl",
+          formButtonPrimary:
+            "bg-[#00D4FF] hover:bg-[#00bfe6] text-[#0A0F1E] font-semibold",
+          footerActionLink: "text-[#00D4FF] hover:text-[#00bfe6]",
+          socialButtonsBlockButton:
+            "bg-[#131B33] border-white/10 text-white hover:bg-[#1A2440]",
+          dividerLine: "bg-white/10",
+          dividerText: "text-gray-400",
+          formFieldInput:
+            "bg-[#131B33] border-white/10 text-white",
+          identityPreview: "bg-[#131B33] border-white/10",
+          identityPreviewText: "text-white",
+          identityPreviewEditButton: "text-[#00D4FF]",
+          userButtonPopoverCard: "bg-[#0D1425] border border-white/10",
+          userButtonPopoverActionButton: "text-gray-300 hover:text-white hover:bg-white/5",
+          userButtonPopoverActionButtonText: "text-gray-300",
+          userButtonPopoverFooter: "hidden",
+        },
+      }}
+    >
+      <html lang="en" className="dark">
+        <body
+          className={`${spaceGrotesk.variable} ${interTight.variable} ${jetbrainsMono.variable} antialiased`}
+        >
+          <Navbar />
+          <main className="min-h-screen">{children}</main>
+          <Footer />
+          <Analytics />
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

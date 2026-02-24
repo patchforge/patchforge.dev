@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, ChevronDown } from "lucide-react";
+import { ArrowRight, ChevronDown, LayoutDashboard } from "lucide-react";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
 import Button from "@/components/ui/Button";
 import Badge from "@/components/ui/Badge";
 import Link from "next/link";
@@ -101,12 +102,22 @@ export default function Hero() {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
         >
-          <Link href="#waitlist">
-            <Button size="lg" className="gap-2">
-              Join the Waitlist
-              <ArrowRight size={18} />
-            </Button>
-          </Link>
+          <SignedOut>
+            <Link href="#waitlist">
+              <Button size="lg" className="gap-2">
+                Join the Waitlist
+                <ArrowRight size={18} />
+              </Button>
+            </Link>
+          </SignedOut>
+          <SignedIn>
+            <Link href="/dashboard">
+              <Button size="lg" className="gap-2">
+                <LayoutDashboard size={18} />
+                Go to Dashboard
+              </Button>
+            </Link>
+          </SignedIn>
           <Link href="#how-it-works">
             <Button variant="secondary" size="lg">
               See How It Works

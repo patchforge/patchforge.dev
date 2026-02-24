@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LayoutDashboard } from "lucide-react";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import Button from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -62,14 +63,31 @@ export default function Navbar() {
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-3">
-            <Link href="/login">
-              <Button variant="ghost" size="sm">
-                Log in
-              </Button>
-            </Link>
-            <Link href="/#waitlist">
-              <Button size="sm">Join Waitlist</Button>
-            </Link>
+            <SignedOut>
+              <Link href="/sign-in">
+                <Button variant="ghost" size="sm">
+                  Sign In
+                </Button>
+              </Link>
+              <Link href="/#waitlist">
+                <Button size="sm">Join Waitlist</Button>
+              </Link>
+            </SignedOut>
+            <SignedIn>
+              <Link href="/dashboard">
+                <Button variant="secondary" size="sm" className="gap-2">
+                  <LayoutDashboard size={14} />
+                  Dashboard
+                </Button>
+              </Link>
+              <UserButton
+                appearance={{
+                  elements: {
+                    avatarBox: "w-8 h-8",
+                  },
+                }}
+              />
+            </SignedIn>
           </div>
 
           {/* Mobile menu button */}
@@ -107,16 +125,35 @@ export default function Navbar() {
                 </Link>
               ))}
               <div className="pt-3 border-t border-navy-700/50 space-y-2">
-                <Link href="/login" onClick={() => setMobileOpen(false)}>
-                  <Button variant="ghost" size="sm" className="w-full justify-center">
-                    Log in
-                  </Button>
-                </Link>
-                <Link href="/#waitlist" onClick={() => setMobileOpen(false)}>
-                  <Button size="sm" className="w-full justify-center">
-                    Join Waitlist
-                  </Button>
-                </Link>
+                <SignedOut>
+                  <Link href="/sign-in" onClick={() => setMobileOpen(false)}>
+                    <Button variant="ghost" size="sm" className="w-full justify-center">
+                      Sign In
+                    </Button>
+                  </Link>
+                  <Link href="/#waitlist" onClick={() => setMobileOpen(false)}>
+                    <Button size="sm" className="w-full justify-center">
+                      Join Waitlist
+                    </Button>
+                  </Link>
+                </SignedOut>
+                <SignedIn>
+                  <Link href="/dashboard" onClick={() => setMobileOpen(false)}>
+                    <Button variant="secondary" size="sm" className="w-full justify-center gap-2">
+                      <LayoutDashboard size={14} />
+                      Dashboard
+                    </Button>
+                  </Link>
+                  <div className="flex justify-center pt-2">
+                    <UserButton
+                      appearance={{
+                        elements: {
+                          avatarBox: "w-8 h-8",
+                        },
+                      }}
+                    />
+                  </div>
+                </SignedIn>
               </div>
             </div>
           </motion.div>
