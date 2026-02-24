@@ -16,6 +16,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Badge from "@/components/ui/Badge";
+import Logo from "@/components/Logo";
+import { useOrg } from "@/hooks/useOrg";
 
 const sidebarLinks = [
   { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
@@ -28,28 +30,14 @@ const sidebarLinks = [
 
 function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
+  const { org } = useOrg();
 
   return (
     <div className="flex flex-col h-full">
       {/* Logo */}
       <div className="px-4 py-5 border-b border-navy-700/50">
-        <Link href="/" className="flex items-center gap-2" onClick={onNavigate}>
-          <svg viewBox="0 0 32 32" className="w-7 h-7" fill="none">
-            <path
-              d="M16 2L4 8v16l12 6 12-6V8L16 2z"
-              className="fill-electric/20 stroke-electric"
-              strokeWidth="1.5"
-            />
-            <path
-              d="M16 8l-6 3v10l6 3 6-3V11l-6-3z"
-              className="fill-electric/40 stroke-electric"
-              strokeWidth="1"
-            />
-            <path d="M16 14l-2 1v4l2 1 2-1v-4l-2-1z" className="fill-electric" />
-          </svg>
-          <span className="font-display text-base font-bold text-white tracking-tight">
-            Patch<span className="text-electric">Forge</span>
-          </span>
+        <Link href="/dashboard" className="flex items-center" onClick={onNavigate}>
+          <Logo variant="full" size="sm" theme="dark" />
         </Link>
       </div>
 
@@ -82,8 +70,8 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
       {/* Plan badge */}
       <div className="px-4 py-4 border-t border-navy-700/50">
         <div className="flex items-center gap-2">
-          <Badge variant="electric">Beta</Badge>
-          <span className="text-xs text-gray-500">Free Plan</span>
+          <Badge variant="electric">{org?.plan === "beta" ? "Beta" : org?.plan ?? "Beta"}</Badge>
+          <span className="text-xs text-gray-500">{org?.plan === "beta" ? "Free Plan" : org?.plan ?? "Free Plan"}</span>
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import { Github, Linkedin, Twitter } from "lucide-react";
 import Link from "next/link";
+import Logo from "@/components/Logo";
 
 const footerLinks = [
   {
@@ -41,26 +42,8 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 py-12 lg:py-16">
           {/* Brand column */}
           <div className="col-span-2">
-            <Link href="/" className="inline-flex items-center gap-2">
-              <svg viewBox="0 0 32 32" className="w-7 h-7" fill="none">
-                <path
-                  d="M16 2L4 8v16l12 6 12-6V8L16 2z"
-                  className="fill-electric/20 stroke-electric"
-                  strokeWidth="1.5"
-                />
-                <path
-                  d="M16 8l-6 3v10l6 3 6-3V11l-6-3z"
-                  className="fill-electric/40 stroke-electric"
-                  strokeWidth="1"
-                />
-                <path
-                  d="M16 14l-2 1v4l2 1 2-1v-4l-2-1z"
-                  className="fill-electric"
-                />
-              </svg>
-              <span className="font-display text-lg font-bold text-white tracking-tight">
-                Patch<span className="text-electric">Forge</span>
-              </span>
+            <Link href="/" className="inline-flex items-center">
+              <Logo variant="full" size="md" theme="dark" />
             </Link>
             <p className="mt-4 text-sm text-gray-500 max-w-xs leading-relaxed">
               The autonomous AI software engineer that turns your Jira tickets into pull requests.

@@ -28,22 +28,24 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "PatchForge — Autonomous AI Software Engineer",
   description:
-    "PatchForge picks up your Jira tickets and opens pull requests on GitHub. Assign a ticket, review a PR — that's it.",
+    "Assign a ticket. Review a PR. PatchForge writes the code.",
   metadataBase: new URL("https://patchforge.dev"),
+  icons: {
+    icon: "/logos/favicon.svg",
+    apple: "/logos/app-icon-128.svg",
+  },
   openGraph: {
     title: "PatchForge — Autonomous AI Software Engineer",
     description:
-      "Assign a ticket. Review a PR. That's it. PatchForge is the AI developer that turns your Jira tickets into pull requests.",
+      "Assign a ticket. Review a PR. PatchForge writes the code.",
     url: "https://patchforge.dev",
     siteName: "PatchForge",
     type: "website",
-    locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
     title: "PatchForge — Autonomous AI Software Engineer",
-    description: "Assign a ticket. Review a PR. That's it.",
-    creator: "@patchforge",
+    description: "Assign a ticket. Review a PR. PatchForge writes the code.",
   },
   robots: {
     index: true,

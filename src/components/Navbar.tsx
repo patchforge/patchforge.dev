@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, LayoutDashboard } from "lucide-react";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import Button from "@/components/ui/Button";
+import Logo from "@/components/Logo";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
@@ -24,28 +25,8 @@ export default function Navbar() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="relative flex items-center justify-center w-8 h-8">
-              <svg viewBox="0 0 32 32" className="w-8 h-8" fill="none">
-                <path
-                  d="M16 2L4 8v16l12 6 12-6V8L16 2z"
-                  className="fill-electric/20 stroke-electric"
-                  strokeWidth="1.5"
-                />
-                <path
-                  d="M16 8l-6 3v10l6 3 6-3V11l-6-3z"
-                  className="fill-electric/40 stroke-electric"
-                  strokeWidth="1"
-                />
-                <path
-                  d="M16 14l-2 1v4l2 1 2-1v-4l-2-1z"
-                  className="fill-electric"
-                />
-              </svg>
-            </div>
-            <span className="font-display text-lg font-bold text-white tracking-tight">
-              Patch<span className="text-electric">Forge</span>
-            </span>
+          <Link href="/" className="flex items-center group">
+            <Logo variant="full" size="sm" theme="dark" />
           </Link>
 
           {/* Desktop nav */}

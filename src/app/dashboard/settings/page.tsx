@@ -1,33 +1,73 @@
 "use client";
 
-import { useState } from "react";
-import { AlertTriangle } from "lucide-react";
+import { useState, useEffect } from "react";
+import { AlertTriangle, Loader2 } from "lucide-react";
 import Button from "@/components/ui/Button";
+import { Skeleton } from "@/components/dashboard/Skeleton";
 import { useToast } from "@/components/dashboard/Toast";
+import { useOrg } from "@/hooks/useOrg";
+import { useAPI } from "@/hooks/useAPI";
+import { ApiError } from "@/lib/api";
 
 export default function SettingsPage() {
+  const api = useAPI();
   const { showToast } = useToast();
+  const { org, isLoading, mutate: orgMutate } = useOrg();
+
   const [orgName, setOrgName] = useState("");
   const [confidence, setConfidence] = useState(0.7);
   const [maxConcurrent, setMaxConcurrent] = useState(3);
   const [autoMerge, setAutoMerge] = useState(false);
   const [label, setLabel] = useState("patchforge");
+  const [saving, setSaving] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
 
-  const handleSave = () => {
-    showToast(
-      "Backend integration coming soon. Your settings will be saved once the API is ready.",
-      "info"
-    );
+  // Populate form when org data loads
+  useEffect(() => {
+    if (org) {
+      setOrgName(org.name);
+      setConfidence(org.confidence_threshold);
+      setMaxConcurrent(org.max_concurrent_tasks);
+      setAutoMerge(org.auto_merge_enabled);
+      setLabel(org.jira_patchforge_label);
+    }
+  }, [org]);
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      await api.updateOrg({
+        name: orgName,
+        confidence_threshold: confidence,
+        max_concurrent_tasks: maxConcurrent,
+        auto_merge_enabled: autoMerge,
+        jira_patchforge_label: label,
+      });
+      showToast("Settings saved!", "success");
+      orgMutate();
+    } catch (err) {
+      showToast(
+        err instanceof ApiError ? err.detail : "Failed to save settings.",
+        "error"
+      );
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const handleDelete = () => {
-    showToast(
-      "Backend integration coming soon. Organization deletion will be available once the API is ready.",
-      "info"
+  if (isLoading) {
+    return (
+      <div className="p-6 lg:p-8 max-w-3xl">
+        <Skeleton className="w-48 h-8 mb-2" />
+        <Skeleton className="w-64 h-4 mb-8" />
+        <Skeleton className="w-full h-64 mb-6" />
+        <Skeleton className="w-full h-48" />
+      </div>
     );
-    setDeleteConfirm(false);
-  };
+  }
+
+  const inputClass =
+    "w-full px-3 py-2 rounded-lg bg-navy-900/80 border border-navy-600/50 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-electric/30 focus:border-electric/40 transition-all";
 
   return (
     <div className="p-6 lg:p-8 max-w-3xl">
@@ -54,7 +94,7 @@ export default function SettingsPage() {
                 placeholder="My Organization"
                 value={orgName}
                 onChange={(e) => setOrgName(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg bg-navy-900/80 border border-navy-600/50 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-electric/30 focus:border-electric/40 transition-all"
+                className={inputClass}
               />
             </div>
 
@@ -66,7 +106,7 @@ export default function SettingsPage() {
                 type="text"
                 value={label}
                 onChange={(e) => setLabel(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg bg-navy-900/80 border border-navy-600/50 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-electric/30 focus:border-electric/40 transition-all"
+                className={inputClass}
               />
               <p className="text-xs text-gray-600 mt-1">
                 The Jira label that triggers PatchForge.
@@ -154,7 +194,10 @@ export default function SettingsPage() {
 
         {/* Save button */}
         <div className="flex justify-end">
-          <Button onClick={handleSave}>Save Settings</Button>
+          <Button onClick={handleSave} disabled={saving} className="gap-2">
+            {saving && <Loader2 size={16} className="animate-spin" />}
+            Save Settings
+          </Button>
         </div>
 
         {/* Danger zone */}
@@ -179,24 +222,15 @@ export default function SettingsPage() {
             <div className="flex items-center gap-3 p-3 rounded-lg bg-red-500/10 border border-red-500/20">
               <AlertTriangle size={18} className="text-red-400 flex-shrink-0" />
               <p className="text-sm text-red-300 flex-1">
-                Are you sure? This cannot be undone.
+                Contact support to delete your organization.
               </p>
-              <div className="flex gap-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setDeleteConfirm(false)}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  size="sm"
-                  className="bg-red-500 hover:bg-red-600 text-white"
-                  onClick={handleDelete}
-                >
-                  Delete
-                </Button>
-              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setDeleteConfirm(false)}
+              >
+                Cancel
+              </Button>
             </div>
           )}
         </div>
